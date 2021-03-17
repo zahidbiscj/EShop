@@ -9,16 +9,23 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using EShop.Api.Configurations;
+using EShop.Core.Constants;
+using EShop.Core.Helpers;
+using Serilog;
 
 namespace EShop.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            Utils.RootPath = env.WebRootPath;
         }
 
         public IConfiguration Configuration { get; }
@@ -26,6 +33,7 @@ namespace EShop.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.SerilogConfigurationSetup(Configuration);
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -43,11 +51,10 @@ namespace EShop.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EShop.Api v1"));
             }
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
