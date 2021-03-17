@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace EShop.Core.Constants
 {
-    public class AppConstants
+    public static class AppConstants
     {
+        public const string SerilogConfigFileName = "SerilogConfigFileName";
     }
 }
