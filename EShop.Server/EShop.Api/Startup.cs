@@ -18,6 +18,7 @@ using EShop.Api.DependenciesRegister;
 using EShop.Core.Constants;
 using EShop.Core.Helpers;
 using Serilog;
+using EShop.Api.Extensions;
 
 namespace EShop.Api
 {
@@ -36,6 +37,10 @@ namespace EShop.Api
         {
             services.AddAllRegisterDependencies();
             services.SerilogConfigurationSetup(Configuration);
+
+            services.AddJwtConfiguration(Configuration);
+            services.AddCorsConfiguration();
+            services.AddIdentityOptions();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
