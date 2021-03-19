@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using EShop.Api.Configurations;
+using EShop.Api.DependenciesRegister;
 using EShop.Core.Constants;
 using EShop.Core.Helpers;
 using Serilog;
@@ -33,6 +34,7 @@ namespace EShop.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAllRegisterDependencies();
             services.SerilogConfigurationSetup(Configuration);
 
             services.AddControllers();
