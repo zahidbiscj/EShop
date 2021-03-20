@@ -17,8 +17,9 @@ namespace EShop.Api.Configurations
         public static void SerilogConfigurationSetup(this IServiceCollection services, IConfiguration Configuration)
         {
             var config = new ConfigurationBuilder()
-                .AddJsonFile(Path.Combine(Utils.RootPath, Configuration.GetSection(AppConstants.SerilogConfigFileName).Value))
+                .AddJsonFile(Path.Combine(Utils.RootPath, Configuration.GetSection(ConfigurationConstants.SerilogConfigFileName).Value))
                 .Build();
+
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(config)
                 .CreateLogger();
