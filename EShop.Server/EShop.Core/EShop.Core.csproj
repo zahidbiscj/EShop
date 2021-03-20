@@ -5,8 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dto\RequestModels\" />
-    <Folder Include="Dto\ResponseModels\" />
     <Folder Include="Interfaces\IRepositories\" />
     <Folder Include="Interfaces\IServices\" />
     <Folder Include="Enums\" />

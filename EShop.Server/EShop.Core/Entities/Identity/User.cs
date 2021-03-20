@@ -10,6 +10,7 @@ namespace EShop.Core.Entities.Identity
     public class User : IdentityUser<Guid>
     {
         public string FullName { get; set; }
+        public bool IsDeleted { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
     }
 }

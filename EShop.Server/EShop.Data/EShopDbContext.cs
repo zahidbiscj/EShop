@@ -21,7 +21,7 @@ namespace EShop.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Todo: Testing Required
-            modelBuilder.Entity<BaseModel<Guid>>().HasQueryFilter(p => !p.IsDeleted);
+            //modelBuilder.Entity<BaseModel<Guid>>().HasQueryFilter(p => !p.IsDeleted);
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EShopDbContext).Assembly);
         }
