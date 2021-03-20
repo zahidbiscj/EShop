@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EShop.Core.Entities.Identity
 {
-    public class Permission
+    public class Permission : BaseModel<Guid>
     {
         public string PermissionName { get; set; }
         public string Description { get; set; }
