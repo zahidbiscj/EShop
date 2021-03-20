@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EShop.Core.Constants;
 using EShop.Core.Helpers;
 using EShop.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -98,7 +99,7 @@ namespace EShop.Api.Extensions
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EShop.Api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = ConfigurationConstants.SwaggerName, Version = "v1" });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

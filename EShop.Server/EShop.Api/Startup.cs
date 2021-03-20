@@ -39,7 +39,7 @@ namespace EShop.Api
         {
             services.AddDbContext<EShopDbContext>(optionsBuilder =>
             {
-                optionsBuilder.UseSqlServer(Configuration.GetConnectionString("EShop_db"));
+                optionsBuilder.UseSqlServer(Configuration.GetConnectionString(ConfigurationConstants.ConnectionStringName));
             });
 
             services.AddAllRegisterDependencies();
@@ -60,7 +60,7 @@ namespace EShop.Api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EShop.Api v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint(ConfigurationConstants.SwaggerUrl, ConfigurationConstants.SwaggerName));
             }
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
