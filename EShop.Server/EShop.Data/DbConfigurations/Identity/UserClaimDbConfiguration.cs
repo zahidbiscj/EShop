@@ -4,19 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EShop.Core.Constants;
-using EShop.Core.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EShop.Data.DbConfigurations.Identity
 {
-    public class UserRoleDbConfiguration : IEntityTypeConfiguration<UserRole>
+    public class UserClaimDbConfiguration : IEntityTypeConfiguration<IdentityUserClaim<Guid>>
     {
-        public void Configure(EntityTypeBuilder<UserRole> builder)
+        public void Configure(EntityTypeBuilder<IdentityUserClaim<Guid>> builder)
         {
-            builder.ToTable(TableNames.UserRoles);
-
-            builder.HasKey(p => new { p.UserId, p.RoleId });
+            builder.HasKey(p => p.Id);
+            builder.ToTable(TableNames.UserClaims);
         }
     }
 }

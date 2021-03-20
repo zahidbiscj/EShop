@@ -15,6 +15,8 @@ namespace EShop.Data.DbConfigurations.Identity
         public void Configure(EntityTypeBuilder<RolePermission> builder)
         {
             builder.ToTable(TableNames.RolePermissions);
+
+            builder.HasKey(p => new { p.RoleId, p.PermissionId });
         }
     }
 }

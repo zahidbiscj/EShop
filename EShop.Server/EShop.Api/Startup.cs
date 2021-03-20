@@ -19,6 +19,8 @@ using EShop.Core.Constants;
 using EShop.Core.Helpers;
 using Serilog;
 using EShop.Api.Extensions;
+using EShop.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Api
 {
@@ -35,6 +37,11 @@ namespace EShop.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<EShopDbContext>(optionsBuilder =>
+            {
+                optionsBuilder.UseSqlServer(Configuration.GetConnectionString("EShop_db"));
+            });
+
             services.AddAllRegisterDependencies();
             services.SerilogConfigurationSetup(Configuration);
 
