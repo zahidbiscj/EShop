@@ -41,12 +41,9 @@ namespace EShop.Api
             services.AddJwtConfiguration(Configuration);
             services.AddCorsConfiguration();
             services.AddIdentityOptions();
+            services.AddSwaggerConfiguration();
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EShop.Api", Version = "v1" });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
