@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EShop.Core.Constants;
 using EShop.Core.Helpers;
+using EShop.Core.Interfaces.Others;
 using EShop.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
