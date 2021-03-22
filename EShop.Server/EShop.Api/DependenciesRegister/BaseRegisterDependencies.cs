@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EShop.Core.Helpers;
 using EShop.Core.Interfaces.Others;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EShop.Api.DependenciesRegister
@@ -16,6 +17,8 @@ namespace EShop.Api.DependenciesRegister
             services.AddRepositoriesDependency();
 
             services.AddSingleton<ICurrentUser, CurrentUserService>();
+
+            //services.AddSingleton<SignInManager<>>()
 
             return services;
         }

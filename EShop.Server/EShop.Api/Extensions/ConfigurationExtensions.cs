@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EShop.Core.Constants;
+using EShop.Core.Entities.Identity;
 using EShop.Core.Helpers;
 using EShop.Core.Interfaces.Others;
 using EShop.Data;
@@ -78,6 +79,12 @@ namespace EShop.Api.Extensions
 
         public static IServiceCollection AddIdentityOptions(this IServiceCollection services)
         {
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<EShopDbContext>()
+                .AddDefaultTokenProviders()
+                .AddRoleManager<RoleManager<Role>>()
+                .AddSignInManager<SignInManager<User>>();
+
             services.Configure<IdentityOptions>(option =>
             {
                 option.Password.RequireDigit = false;

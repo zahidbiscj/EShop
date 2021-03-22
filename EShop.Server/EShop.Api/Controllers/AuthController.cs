@@ -2,18 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using EShop.Core.Constants;
 using EShop.Core.Dto.RequestModels;
 using EShop.Core.Dto.ResponseModels;
 using EShop.Core.Entities.Identity;
 using EShop.Core.Exceptions;
+using EShop.Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -25,14 +26,18 @@ namespace EShop.Api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
+        private readonly IAuthService _authService;
 
         public AuthController(SignInManager<User> signInManager, UserManager<User> userManager, RoleManager<Role> roleManager,
-            IConfiguration configuration)
+            IConfiguration configuration, IMapper mapper, IAuthService authService)
         {
             _roleManager = roleManager;
             _signInManager = signInManager;
             _userManager = userManager;
             _configuration = configuration;
+            _mapper = mapper;
+            _authService = authService;
         }
 
         [AllowAnonymous]
@@ -51,7 +56,7 @@ namespace EShop.Api.Controllers
             {
                 return new LoginResponseModel()
                 {
-                    Token = await GenerateToken(user),
+                    Token = await _authService.GenerateToken(user),
                     StatusCode = AppStatusCode.SuccessStatusCode.ToString(),
                     Message = string.Empty,
                     //UserProfile = await _userService.GetUserById(user.Id)
@@ -61,31 +66,28 @@ namespace EShop.Api.Controllers
             throw new UnAuthorizedException(MessageConstants.UsernamePasswordDoNotMatch);
         }
 
-        private async Task<string> GenerateToken(User user)
+        [HttpPost("Register")]
+        public async Task<ActionResult<RegisterResponseModel>> Register(RegisterRequestModel model)
         {
-            var userRoles = _roleManager.Roles
-                .Where(x => x.UserRoles.Select(y => y.UserId).Contains(user.Id)).Select(x => x.Name).ToList();
-
-            var claims = new List<Claim>
+            if (await _userManager.Users.AnyAsync(x => x.Email == model.Email.ToLower()))
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, string.Join(',',userRoles))
-            };
+                return BadRequest("Username is taken");
+            }
+            var user = _mapper.Map<User>(model);
+            user.UserName = model.Email.ToLower();
+            var result = await _userManager.CreateAsync(user, model.Password);
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("AppSettings:Token").Value);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            var roleResult = await _userManager.AddToRoleAsync(user, model.RoleName);
+
+            if (!roleResult.Succeeded) return BadRequest(result.Errors);
+
+            return new RegisterResponseModel
             {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha512Signature)
+                //Username = user.UserName,
+                //Token = await _tokenService.CreateToken(user)
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
         }
-
     }
 }
