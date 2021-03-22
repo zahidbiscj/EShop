@@ -11,8 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Data
 {
-    public class EShopDbContext : IdentityDbContext<User, Role, Guid, IdentityUserClaim<Guid>,
-        UserRole, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
+    public class EShopDbContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
         public EShopDbContext(DbContextOptions<EShopDbContext> options) : base(options) { }
 
@@ -21,6 +20,9 @@ namespace EShop.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //Todo: Testing Required
+            //modelBuilder.Entity<BaseModel<Guid>>().HasQueryFilter(p => !p.IsDeleted);
+
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EShopDbContext).Assembly);
         }
     }

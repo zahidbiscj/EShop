@@ -42,7 +42,11 @@ namespace EShop.Api
                 code = (HttpStatusCode)domEx.ToHttpStatusCode();
             }
 
-            var result = JsonConvert.SerializeObject(new { message = code != HttpStatusCode.InternalServerError ? ex.Message : string.Empty });
+            var result = JsonConvert.SerializeObject(new
+            {
+                message = code != HttpStatusCode.InternalServerError ? ex.Message : string.Empty,
+                statusCode = (int)code
+            });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
 

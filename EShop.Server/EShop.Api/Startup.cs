@@ -50,6 +50,8 @@ namespace EShop.Api
             services.AddIdentityOptions();
             services.AddSwaggerConfiguration();
 
+            services.AddAutoMapper(typeof(EShopDbContext));
+
             services.AddControllers();
         }
 

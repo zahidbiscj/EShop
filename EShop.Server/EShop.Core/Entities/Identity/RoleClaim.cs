@@ -7,10 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace EShop.Core.Entities.Identity
 {
-    public class User : IdentityUser<Guid>
+    public class RoleClaim : IdentityRoleClaim<Guid>
     {
-        public string FullName { get; set; }
-        public bool IsDeleted { get; set; }
-        public ICollection<UserRole> UserRoles { get; set; }
     }
 }
