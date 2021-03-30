@@ -19,6 +19,7 @@ using EShop.Core.Constants;
 using EShop.Core.Helpers;
 using Serilog;
 using EShop.Api.Extensions;
+using EShop.Api.Seeders;
 using EShop.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,7 +43,7 @@ namespace EShop.Api
                 optionsBuilder.UseSqlServer(Configuration.GetConnectionString(ConfigurationConstants.ConnectionStringName));
             });
 
-            services.AddAllRegisterDependencies();
+            services.AddAllRegisterDependencies(Configuration);
             services.SerilogConfigurationSetup(Configuration);
 
             services.AddJwtConfiguration(Configuration);
@@ -56,8 +57,11 @@ namespace EShop.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DatabaseSeeder seeder)
         {
+            seeder.EnsureDatabaseExists(app);
+            seeder.Seed();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
