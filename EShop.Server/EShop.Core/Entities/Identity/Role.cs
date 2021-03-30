@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace EShop.Core.Entities.Identity
 {
-    public class Role : IdentityRole<Guid>
+    public class Role : IdentityRole<int>
     {
         public virtual ICollection<RolePermission> RolePermissions { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }

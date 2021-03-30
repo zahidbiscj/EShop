@@ -85,6 +85,7 @@ namespace EShop.Api.Controllers
 
             return new RegisterResponseModel
             {
+                Token = await _authService.GenerateToken(user),
                 //Username = user.UserName,
                 //Token = await _tokenService.CreateToken(user)
             };

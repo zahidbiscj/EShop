@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace EShop.Core.Entities.Identity
 {
-    public class UserToken : IdentityUserToken<Guid>
+    public class UserToken : IdentityUserToken<int>
     {
     }
 }

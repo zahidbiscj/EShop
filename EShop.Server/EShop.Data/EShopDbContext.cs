@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Data
 {
-    public class EShopDbContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+    public class EShopDbContext : IdentityDbContext<User, Role, int, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
         public EShopDbContext(DbContextOptions<EShopDbContext> options) : base(options) { }
 

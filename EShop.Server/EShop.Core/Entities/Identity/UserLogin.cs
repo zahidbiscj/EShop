@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EShop.Core.Entities.Identity
 {
-    public class UserLogin : IdentityUserLogin<Guid>
+    public class UserLogin : IdentityUserLogin<int>
     {
     }
 }
