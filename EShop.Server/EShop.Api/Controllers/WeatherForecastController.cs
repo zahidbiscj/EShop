@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EShop.Core.Constants;
 using EShop.Core.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EShop.Api.Controllers
 {
@@ -25,17 +26,18 @@ namespace EShop.Api.Controllers
             _logger = logger;
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public IActionResult Get()
         {
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return Ok(Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
-            .ToArray();
+            .ToArray());
         }
     }
 }

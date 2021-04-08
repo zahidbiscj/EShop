@@ -20,11 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Seeders\" />
-    <Folder Include="wwwroot\data\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EShop.Core\EShop.Core.csproj" />
     <ProjectReference Include="..\EShop.Data\EShop.Data.csproj" />
     <ProjectReference Include="..\EShop.Service\EShop.Service.csproj" />

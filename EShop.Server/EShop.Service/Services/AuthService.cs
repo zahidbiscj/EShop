@@ -37,7 +37,7 @@ namespace EShop.Service.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, string.Join(',',userRoles))
+                //new Claim(ClaimTypes.Role, string.Join(',',userRoles))
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace EShop.Core.Entities.Identity
 {
-    public class UserClaim : IdentityUserClaim<Guid>
+    public class UserClaim : IdentityUserClaim<int>
     {
     }
 }

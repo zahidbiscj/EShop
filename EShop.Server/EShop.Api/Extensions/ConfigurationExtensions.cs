@@ -51,6 +51,7 @@ namespace EShop.Api.Extensions
                         ValidateAudience = false
                     };
                 });
+
             services.Configure<ApiBehaviorOptions>(config =>
             {
                 config.InvalidModelStateResponseFactory = context =>

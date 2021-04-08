@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 
-namespace EShop.Core.Entities.Identity
+namespace EShop.Core.Helpers
 {
-    public class UserToken : IdentityUserToken<int>
+    public class SeedRolesModel
     {
+        public string Name { get; set; }
     }
 }
