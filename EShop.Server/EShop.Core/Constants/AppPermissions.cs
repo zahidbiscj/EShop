@@ -8,5 +8,16 @@ namespace EShop.Core.Constants
 {
     public class AppPermissions
     {
+        public const string ViewWeatherForcast = "ViewWeatherForcast";
+
+        public static List<string> All()
+        {
+            Type t = typeof(AppPermissions);
+
+            return t.GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)
+                .Select(x => x.GetValue(null).ToString())
+                .ToList();
+        }
     }
+
 }

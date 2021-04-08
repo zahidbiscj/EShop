@@ -26,7 +26,7 @@ namespace EShop.Api.Controllers
             _logger = logger;
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(Policy = AppPermissions.ViewWeatherForcast)]
         [HttpGet]
         public IActionResult Get()
         {

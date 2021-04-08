@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using EShop.Api.Configurations;
 using EShop.Api.DependenciesRegister;
@@ -21,6 +22,7 @@ using Serilog;
 using EShop.Api.Extensions;
 using EShop.Api.Seeders;
 using EShop.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Api
@@ -51,6 +53,19 @@ namespace EShop.Api
             services.AddIdentityOptions();
             services.AddSwaggerConfiguration();
 
+            services.AddAuthorizationPolicyEvaluator();
+            services.AddAuthorization(options =>
+            {
+                AppPermissions.All().ForEach(claim =>
+                {
+                    options.AddPolicy(claim, policy =>
+                    {
+                        policy.RequireClaim(AppConstants.Permission, claim);
+                        policy.AuthenticationSchemes = new List<string>() {"Bearer"};
+                    });
+                });
+            });
+
             services.AddAutoMapper(typeof(EShopDbContext));
 
             services.AddControllers();
@@ -72,6 +87,8 @@ namespace EShop.Api
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
