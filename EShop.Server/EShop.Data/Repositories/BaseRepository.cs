@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Data.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : BaseModel<T>
+    public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
         private readonly EShopDbContext _context;
         public BaseRepository(EShopDbContext context)

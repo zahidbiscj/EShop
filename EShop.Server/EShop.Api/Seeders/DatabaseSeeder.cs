@@ -8,6 +8,7 @@ using EShop.Api.Configurations;
 using EShop.Core.Constants;
 using EShop.Core.Entities.Identity;
 using EShop.Core.Helpers;
+using EShop.Core.Interfaces.IRepositories;
 using EShop.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,21 +27,47 @@ namespace EShop.Api.Seeders
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly IMapper _mapper;
+        private readonly IPermissionRepository _permissionRepository;
 
         public DatabaseSeeder(IWebHostEnvironment hostEnvironment, IOptions<SeedDataFilesConfiguration> fileConfiguration,
-            UserManager<User> userManager, RoleManager<Role> roleManager, IMapper mapper)
+            UserManager<User> userManager, RoleManager<Role> roleManager, IMapper mapper, IPermissionRepository permissionRepository)
         {
             _hostEnvironment = hostEnvironment;
             _fileConfig = fileConfiguration.Value;
             _roleManager = roleManager;
             _userManager = userManager;
             _mapper = mapper;
+            _permissionRepository = permissionRepository;
         }
 
         public void Seed()
         {
-            SeedRoles();
+            SeedPermission();
+            SeedRolesWithPermissions();
             SeedUsersWithRoles();
+        }
+
+        public async Task SeedPermission()
+        {
+            var seedPermissions = ReadJsonData<Permission>(_fileConfig.PermissionsFilename);
+
+            var all = await _permissionRepository.Repository<Permission>().ListAllAsync();
+            var newIds = seedPermissions.Select(x => x.Id)
+                .Except(all.Select(x => x.Id)).ToList();
+
+            await 
+                _permissionRepository.InsertRange(seedPermissions.Where(x => newIds.Contains(x.Id)));
+
+            seedPermissions.ForEach(seed =>
+            {
+                var p = all.FirstOrDefault(x => x.Id == seed.Id);
+                if (p != null)
+                {
+                    p.Description = seed.Description;
+                    _permissionRepository.Update(p);
+                }
+            });
+
         }
 
         private void SeedUsersWithRoles()
