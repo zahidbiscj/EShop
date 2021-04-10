@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace EShop.Core.Entities
 {
-    public class BaseModel<TId>
+    public class BaseEntity
     {
-        public TId Id { get; set; }
+        public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
-        public Guid CreatedBy { get; set; }
+        public int CreatedBy { get; set; }
         public DateTime? LastUpdated { get; set; }
-        public Guid? UpdatedBy { get; set; }
+        public int? UpdatedBy { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

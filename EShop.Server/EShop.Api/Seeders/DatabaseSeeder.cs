@@ -55,18 +55,18 @@ namespace EShop.Api.Seeders
             var newIds = seedPermissions.Select(x => x.Id)
                 .Except(all.Select(x => x.Id)).ToList();
 
-            await 
-                _permissionRepository.InsertRange(seedPermissions.Where(x => newIds.Contains(x.Id)));
+            //await 
+            //    _permissionRepository.InsertRange(seedPermissions.Where(x => newIds.Contains(x.Id)));
 
-            seedPermissions.ForEach(seed =>
-            {
-                var p = all.FirstOrDefault(x => x.Id == seed.Id);
-                if (p != null)
-                {
-                    p.Description = seed.Description;
-                    _permissionRepository.Update(p);
-                }
-            });
+            //seedPermissions.ForEach(seed =>
+            //{
+            //    var p = all.FirstOrDefault(x => x.Id == seed.Id);
+            //    if (p != null)
+            //    {
+            //        p.Description = seed.Description;
+            //        _permissionRepository.Update(p);
+            //    }
+            //});
 
         }
 
@@ -85,7 +85,7 @@ namespace EShop.Api.Seeders
             }
         }
 
-        private void SeedRoles()
+        private void SeedRolesWithPermissions()
         {
             var seedRoles = ReadJsonData<SeedRolesModel>(_fileConfig.RolesFileName);
             var roles = _mapper.Map<List<Role>>(seedRoles);

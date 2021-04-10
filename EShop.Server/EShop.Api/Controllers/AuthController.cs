@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace EShop.Api.Controllers
@@ -28,9 +29,12 @@ namespace EShop.Api.Controllers
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
-
+        private readonly IUserService _userService;
+        private readonly ILogger<AuthController> _logger;
+        private readonly IPermissionService _permissionService;
         public AuthController(SignInManager<User> signInManager, UserManager<User> userManager, RoleManager<Role> roleManager,
-            IConfiguration configuration, IMapper mapper, IAuthService authService)
+            IConfiguration configuration, IMapper mapper, IAuthService authService, IUserService userService, ILogger<AuthController> logger,
+            IPermissionService permissionService)
         {
             _roleManager = roleManager;
             _signInManager = signInManager;
@@ -38,13 +42,16 @@ namespace EShop.Api.Controllers
             _configuration = configuration;
             _mapper = mapper;
             _authService = authService;
+            _userService = userService;
+            _logger = logger;
+            _permissionService = permissionService;
         }
 
         [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<LoginResponseModel> Login(LoginRequestModel model)
         {
-            //_logger.LogInformation("User {Email} is login", model.Email);
+            _logger.LogInformation("User {Email} is login", model.Email);
             var user = _userManager.Users.SingleOrDefault(x => x.Email == model.Email.Trim() && !x.IsDeleted);
             if (user == null)
             {
@@ -58,8 +65,9 @@ namespace EShop.Api.Controllers
                 {
                     Token = await _authService.GenerateToken(user),
                     StatusCode = AppStatusCode.SuccessStatusCode.ToString(),
-                    Message = string.Empty,
-                    //UserProfile = await _userService.GetUserById(user.Id)
+                    Message = MessageConstants.LoginSuccess,
+                    Permissions = await _permissionService.GetPermissionsByUserId(user.Id),
+                    UserProfile = await _userService.GetUserById(user.Id)
                 };
             }
 
@@ -85,9 +93,7 @@ namespace EShop.Api.Controllers
 
             return new RegisterResponseModel
             {
-                Token = await _authService.GenerateToken(user),
-                //Username = user.UserName,
-                //Token = await _tokenService.CreateToken(user)
+                Token = await _authService.GenerateToken(user)
             };
         }
     }

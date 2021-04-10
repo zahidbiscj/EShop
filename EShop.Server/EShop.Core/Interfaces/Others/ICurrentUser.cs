@@ -6,7 +6,7 @@ namespace EShop.Core.Interfaces.Others
 {
     public interface ICurrentUser
     {
-        Guid UserId { get; }
+        int UserId { get; }
         string Role { get; }
         void SetClaims(IEnumerable<Claim> claims);
     }

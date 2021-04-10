@@ -12,6 +12,6 @@ namespace EShop.Core.Dto.ResponseModels
         public string StatusCode { get; set; }
         public string Message { get; set; }
         public List<string> Permissions { get; set; }
-        //public UserViewModel UserProfile { get; set; }
+        public UserResponseModel UserProfile { get; set; }
     }
 }

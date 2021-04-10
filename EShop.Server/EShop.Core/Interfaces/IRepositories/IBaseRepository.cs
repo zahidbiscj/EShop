@@ -8,7 +8,7 @@ using EShop.Core.Interfaces.Others;
 
 namespace EShop.Core.Interfaces.IRepositories
 {
-    public interface IBaseRepository<T> where T : BaseModel<T>
+    public interface IBaseRepository<T> where T : BaseEntity
     {
         Task<T> GetByIdAsync(int id);
         Task<IReadOnlyList<T>> ListAllAsync();
