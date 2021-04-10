@@ -2,10 +2,11 @@
   {
     "id": 1,
     "name": "Admin",
-    "permissions": [1] 
+    "permissions": [1,2] 
   },
   {
     "id": 2,
-    "name": "Customer"
+    "name": "Customer",
+    "permissions": [1]
   }
 ]

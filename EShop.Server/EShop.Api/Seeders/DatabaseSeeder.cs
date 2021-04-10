@@ -46,9 +46,9 @@ namespace EShop.Api.Seeders
 
         public async Task Seed()
         {
-            //await SeedPermissions();
-            //await SeedRolesWithPermissions();
-            //await SeedUsersWithRoles();
+            await SeedPermissions();
+            await SeedRolesWithPermissions();
+            await SeedUsersWithRoles();
         }
 
         public async Task SeedPermissions()
