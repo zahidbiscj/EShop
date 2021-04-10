@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EShop.Core.Interfaces.Others;
 
 namespace EShop.Core.Entities
 {
-    public class BaseEntity
+    public class BaseEntity<TId> : IBaseEntity
     {
-        public int Id { get; set; }
+        public TId Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public int CreatedBy { get; set; }
         public DateTime? LastUpdated { get; set; }

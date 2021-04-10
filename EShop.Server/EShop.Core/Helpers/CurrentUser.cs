@@ -10,6 +10,10 @@ namespace EShop.Core.Helpers
 {
     public class CurrentUserService : ICurrentUser
     {
+        public CurrentUserService()
+        {
+            Claims = new List<Claim>();
+        }
         private List<Claim> _claims;
         public int UserId
         {
@@ -28,6 +32,8 @@ namespace EShop.Core.Helpers
                 return role.ToLower();
             }
         }
+
+        public List<Claim> Claims { get; set; }
 
         public void SetClaims(IEnumerable<Claim> claims)
         {

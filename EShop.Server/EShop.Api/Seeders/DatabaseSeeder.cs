@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using EShop.Api.Configurations;
@@ -9,6 +10,7 @@ using EShop.Core.Constants;
 using EShop.Core.Entities.Identity;
 using EShop.Core.Helpers;
 using EShop.Core.Interfaces.IRepositories;
+using EShop.Core.Interfaces.Others;
 using EShop.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,9 +30,10 @@ namespace EShop.Api.Seeders
         private readonly RoleManager<Role> _roleManager;
         private readonly IMapper _mapper;
         private readonly IPermissionRepository _permissionRepository;
+        private readonly EShopDbContext _context;
 
         public DatabaseSeeder(IWebHostEnvironment hostEnvironment, IOptions<SeedDataFilesConfiguration> fileConfiguration,
-            UserManager<User> userManager, RoleManager<Role> roleManager, IMapper mapper, IPermissionRepository permissionRepository)
+            UserManager<User> userManager, RoleManager<Role> roleManager, IMapper mapper, IPermissionRepository permissionRepository, EShopDbContext context)
         {
             _hostEnvironment = hostEnvironment;
             _fileConfig = fileConfiguration.Value;
@@ -38,26 +41,26 @@ namespace EShop.Api.Seeders
             _userManager = userManager;
             _mapper = mapper;
             _permissionRepository = permissionRepository;
+            _context = context;
         }
 
-        public void Seed()
+        public async Task Seed()
         {
-            SeedPermission();
-            SeedRolesWithPermissions();
-            SeedUsersWithRoles();
+            //await SeedPermissions();
+            //await SeedRolesWithPermissions();
+            //await SeedUsersWithRoles();
         }
 
-        public async Task SeedPermission()
+        public async Task SeedPermissions()
         {
             var seedPermissions = ReadJsonData<Permission>(_fileConfig.PermissionsFilename);
 
-            var all = await _permissionRepository.Repository<Permission>().GetAllList();
+            var all = await _permissionRepository.GetAllList();
             var newIds = seedPermissions.Select(x => x.Id)
                 .Except(all.Select(x => x.Id)).ToList();
 
-            //await 
-            //    _permissionRepository.InsertRange(seedPermissions.Where(x => newIds.Contains(x.Id)));
-
+            await _permissionRepository.InsertRange(seedPermissions.Where(x => newIds.Contains(x.Id)));
+            await WriteToDb(TableNames.Permissions);
             //seedPermissions.ForEach(seed =>
             //{
             //    var p = all.FirstOrDefault(x => x.Id == seed.Id);
@@ -70,28 +73,87 @@ namespace EShop.Api.Seeders
 
         }
 
-        private void SeedUsersWithRoles()
+        private async Task WriteToDb(string tableName)
+        {
+            await _context.Database.OpenConnectionAsync();
+            try
+            {
+                _context.Database.ExecuteSqlRaw($"SET IDENTITY_INSERT dbo.{tableName} ON");
+                await _context.SaveChangesAsync();
+                _context.Database.ExecuteSqlRaw($"SET IDENTITY_INSERT dbo.{tableName} OFF");
+            }
+            finally
+            {
+                await _context.Database.CloseConnectionAsync();
+            }
+        }
+
+        private async Task SeedUsersWithRoles()
         {
             var seedUsers = ReadJsonData<SeedUsersModel>(_fileConfig.UsersFileName);
             var users = _mapper.Map<List<User>>(seedUsers);
             foreach (var user in users)
             {
-                var result = _userManager.CreateAsync(user, AppConstants.DefaultPassword).Result;
+                var result = await _userManager.CreateAsync(user, AppConstants.DefaultPassword);
                 if (result.Succeeded)
                 {
-                    var role = _roleManager.Roles.FirstOrDefault(x => x.Id == user.Id);
+                    var role = await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == user.Id);
                     _userManager.AddToRoleAsync(user, role?.Name).Wait();
                 }
             }
         }
 
-        private void SeedRolesWithPermissions()
+        /*
+         *  SeedRole -> Id,Name,Permissions{PermissionId}
+         *  existingRole -> Id,Name,RolePermissions{roleId,PermissionId}
+         *  RolePermissions -> RoleId, PermissionId
+         * 1. SeedRoles er id er shathe role er id match korbo .. insert korbo jodi match na kore
+         * 2. SeedRole er permission er shathe RolePermission er permission id match korbo 
+         */
+        private async Task SeedRolesWithPermissions()
         {
             var seedRoles = ReadJsonData<SeedRolesModel>(_fileConfig.RolesFileName);
-            var roles = _mapper.Map<List<Role>>(seedRoles);
-            foreach (var role in roles)
+            var existingRoles = await _roleManager.Roles.Include(x => x.RolePermissions).ToListAsync();
+
+            foreach (var seedRole in seedRoles)
             {
-                _roleManager.CreateAsync(role).Wait();
+                var existingRole = existingRoles.FirstOrDefault(x => x.Id == seedRole.Id);
+
+                if (existingRole != null)
+                {
+                    var a = existingRole.RolePermissions.Select(x => x.PermissionId).AsQueryable();
+                    var b = seedRole.Permissions.Select(permissionId => permissionId).AsQueryable();
+                    var newPermissionId = b.Except(a).ToList();
+
+                    foreach (var item in newPermissionId)
+                    {
+                        existingRole.RolePermissions.Add(new RolePermission()
+                        {
+                            PermissionId = item,
+                            RoleId = existingRole.Id
+                        });
+                    }
+
+                    await _roleManager.UpdateAsync(existingRole);
+                }
+                else
+                {
+                    var rolePermissions = new List<RolePermission>();
+                    foreach (var seedRolePermissionId in seedRole.Permissions)
+                    {
+                        rolePermissions.Add(new RolePermission()
+                        {
+                            PermissionId = seedRolePermissionId,
+                            RoleId = seedRole.Id
+                        });
+                    }
+                    await _roleManager.CreateAsync(new Role()
+                    {
+                        Id = seedRole.Id,
+                        Name = seedRole.Name,
+                        RolePermissions = rolePermissions
+                    });
+                }
             }
         }
 

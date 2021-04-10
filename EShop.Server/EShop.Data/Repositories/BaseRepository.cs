@@ -12,64 +12,67 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Data.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
+    public class BaseRepository<TModel, TId> : IBaseRepository<TModel, TId> where TModel : BaseEntity<TId>
     {
-        private readonly DbSet<T> _dbSet;
+        protected readonly EShopDbContext _context;
+        private readonly DbSet<TModel> _dbSet;
         public BaseRepository(EShopDbContext context)
         {
-            _dbSet = context.Set<T>();
+            _context = context;
+            _dbSet = _context.Set<TModel>();
         }
 
-        public async Task<T> GetById(int id)
+        public async Task<TModel> GetById(int id)
         {
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task<IReadOnlyList<T>> GetAllList()
+        public async Task<IReadOnlyList<TModel>> GetAllList()
         {
             return await _dbSet.ToListAsync();
         }
 
-        public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
+        public async Task<TModel> GetEntityWithSpec(ISpecification<TModel> spec)
         {
             return await ApplySpecification(spec).FirstOrDefaultAsync();
         }
 
-        public async Task<IReadOnlyList<T>> ListWithSpec(ISpecification<T> spec)
+        public async Task<IReadOnlyList<TModel>> ListWithSpec(ISpecification<TModel> spec)
         {
             return await ApplySpecification(spec).ToListAsync();
         }
 
-        public async Task<int> CountWithSpec(ISpecification<T> spec)
+        public async Task<int> CountWithSpec(ISpecification<TModel> spec)
         {
             return await ApplySpecification(spec).CountAsync();
         }
 
-        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+        private IQueryable<TModel> ApplySpecification(ISpecification<TModel> spec)
         {
-            return SpecificationEvaluator<T>.GetQuery(_dbSet.AsQueryable(), spec);
+            return SpecificationEvaluator<TModel, TId>.GetQuery(_dbSet.AsQueryable(), spec);
         }
 
-        public IQueryable<T> GetAll()
+        public IQueryable<TModel> GetAll()
         {
             return _dbSet.AsNoTracking();
         }
 
-        public async Task Insert(T entity)
+        public async Task Insert(TModel entity)
         {
             await _dbSet.AddAsync(entity);
         }
 
-        public async Task InsertRange(IEnumerable<T> entity)
+        public async Task InsertRange(IEnumerable<TModel> entity)
         {
             await _dbSet.AddRangeAsync(entity);
+            //await _context.SaveChangesAsync();
         }
 
-        public void Update(T entity)
+        public void Update(TModel entity)
         {
             _dbSet.Update(entity);
         }
-        public void UpdateRange(IEnumerable<T> entity)
+        public void UpdateRange(IEnumerable<TModel> entity)
         {
             _dbSet.UpdateRange(entity);
         }
@@ -80,19 +83,14 @@ namespace EShop.Data.Repositories
             Delete(entity);
         }
 
-        public void Delete(T entity)
+        public void Delete(TModel entity)
         {
             _dbSet.Remove(entity);
         }
 
-        public void DeleteRange(IEnumerable<T> entities)
+        public void DeleteRange(IEnumerable<TModel> entities)
         {
             _dbSet.RemoveRange(entities);
-        }
-
-        public async Task<int> Count(Expression<Func<T, bool>> filter)
-        {
-            return await _dbSet.CountAsync(filter);
         }
     }
 }

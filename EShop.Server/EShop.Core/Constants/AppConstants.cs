@@ -11,5 +11,6 @@ namespace EShop.Core.Constants
         public const string DefaultPassword = "Pass@123";
         public const string SeedDataFileConfig = "SeedDataFileConfig";
         public const string Permission = "EShop/Permission";
+        public const string SystemUserIdentifier = "-100";
     }
 }

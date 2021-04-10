@@ -8,6 +8,7 @@ namespace EShop.Core.Interfaces.Others
     {
         int UserId { get; }
         string Role { get; }
+        List<Claim> Claims { get; set; }
         void SetClaims(IEnumerable<Claim> claims);
     }
 }

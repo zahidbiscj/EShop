@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Core.Specifications
 {
-    public class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
+    public class SpecificationEvaluator<TEntity, TId> where TEntity : BaseEntity<TId>
     {
         public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec)
         {
