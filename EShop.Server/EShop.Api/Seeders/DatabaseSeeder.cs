@@ -51,7 +51,7 @@ namespace EShop.Api.Seeders
         {
             var seedPermissions = ReadJsonData<Permission>(_fileConfig.PermissionsFilename);
 
-            var all = await _permissionRepository.Repository<Permission>().ListAllAsync();
+            var all = await _permissionRepository.Repository<Permission>().GetAllList();
             var newIds = seedPermissions.Select(x => x.Id)
                 .Except(all.Select(x => x.Id)).ToList();
 
