@@ -13,7 +13,7 @@ namespace EShop.Data.MappingProfiles
     {
         public PermissionMappingProfile()
         {
-            CreateMap<Permission, PermissionResponseModel>();
+            CreateMap<Permission, PermissionResponseModel>().ReverseMap();
         }
     }
 }

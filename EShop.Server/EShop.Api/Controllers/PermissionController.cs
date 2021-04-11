@@ -21,9 +21,10 @@ namespace EShop.Api.Controllers
 
         [Authorize(Policy = AppPermissions.ViewPermissions)]
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_permissionService.GetAllPermissions());
+            var result = await _permissionService.GetAllPermissions();
+            return Ok(result);
         }
     }
 }
