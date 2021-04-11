@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EShop.Api.Seeders;
 using EShop.Core.Entities.Identity;
 using EShop.Core.Helpers;
 using EShop.Core.Interfaces.IRepositories;
@@ -22,7 +20,7 @@ namespace EShop.Api.Helpers
             _roleManager = roleManager;
             _permissionRepository = permissionRepository;
         }
-        public async Task InsertRoleWithPermissions(SeedRolesModel seedRole, DatabaseSeeder databaseSeeder)
+        public async Task InsertRoleWithPermissions(SeedRolesModel seedRole)
         {
             var rolePermissions = new List<RolePermission>();
             seedRole.Permissions.ForEach(seedRolePermissionId =>
@@ -42,19 +40,21 @@ namespace EShop.Api.Helpers
             });
         }
 
-        public async Task UpdatePermissionsToExistingRole(SeedRolesModel seedRole, Role existingRole, DatabaseSeeder databaseSeeder)
+        public async Task UpdatePermissionsToExistingRole(SeedRolesModel seedRole, Role existingRole)
         {
-            var newPermissionId = seedRole.Permissions.Select(permissionId => permissionId).AsQueryable()
-                .Except(existingRole.RolePermissions.Select(x => x.PermissionId).AsQueryable()).ToList();
+            var newPermissionId = seedRole.Permissions.Where(seedPermissionId => existingRole.RolePermissions
+                .All(y => y.PermissionId != seedPermissionId))
+                .ToList();
 
-            newPermissionId.ForEach(permissionId =>
+            foreach (var permissionId in newPermissionId)
+            {
                 existingRole.RolePermissions.Add(new RolePermission()
                 {
                     RoleId = existingRole.Id,
                     PermissionId = permissionId
-                }));
-
-            await _roleManager.UpdateAsync(existingRole);
+                });
+                await _roleManager.UpdateAsync(existingRole);
+            }
         }
 
         public void DescriptionUpdateOfExistingPermission(List<Permission> seedPermissions, IReadOnlyList<Permission> existingPermissions)

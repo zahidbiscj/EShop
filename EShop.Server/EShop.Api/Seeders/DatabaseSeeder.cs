@@ -83,14 +83,13 @@ namespace EShop.Api.Seeders
             foreach (var seedRole in seedRoles)
             {
                 var existingRole = existingRoles.FirstOrDefault(x => x.Id == seedRole.Id);
-
                 if (existingRole != null)
                 {
-                    await _seedIdentityHelper.UpdatePermissionsToExistingRole(seedRole, existingRole, this);
+                    await _seedIdentityHelper.UpdatePermissionsToExistingRole(seedRole, existingRole);
                 }
                 else
                 {
-                    await _seedIdentityHelper.InsertRoleWithPermissions(seedRole, this);
+                    await _seedIdentityHelper.InsertRoleWithPermissions(seedRole);
                 }
             }
         }
