@@ -37,9 +37,8 @@ namespace EShop.Api.Helpers
                 });
             });
 
-            var result = await _roleManager.CreateAsync(new Role()
+            await _roleManager.CreateAsync(new Role()
             {
-                //Id = seedRole.Id,
                 Name = seedRole.Name,
                 RolePermissions = rolePermissions
             });
