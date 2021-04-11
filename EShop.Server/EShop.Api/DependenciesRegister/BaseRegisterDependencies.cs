@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EShop.Api.Configurations;
 using EShop.Api.Extensions;
+using EShop.Api.Helpers;
 using EShop.Api.Seeders;
 using EShop.Core.Constants;
 using EShop.Core.Helpers;
@@ -25,6 +26,7 @@ namespace EShop.Api.DependenciesRegister
             services.AddScoped<IAuthorizationHandler, CustomAuthorizationExtension>();
             services.AddSingleton<ICurrentUser, CurrentUserService>();
             services.AddScoped<DatabaseSeeder>();
+            services.AddScoped<SeedIdentityHelper>();
             services.Configure<SeedDataFilesConfiguration>(configuration.GetSection(AppConstants.SeedDataFileConfig));
 
             return services;
