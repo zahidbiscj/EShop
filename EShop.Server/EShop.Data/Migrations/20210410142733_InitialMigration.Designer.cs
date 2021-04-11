@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EShop.Data.Migrations
 {
     [DbContext(typeof(EShopDbContext))]
-    [Migration("20210330173901_InitialMigration")]
+    [Migration("20210410142733_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,8 +31,8 @@ namespace EShop.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -46,8 +46,8 @@ namespace EShop.Data.Migrations
                     b.Property<string>("PermissionName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

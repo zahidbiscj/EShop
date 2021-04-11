@@ -1,23 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using EShop.Api.Configurations;
 using EShop.Api.DependenciesRegister;
 using EShop.Core.Constants;
 using EShop.Core.Helpers;
-using Serilog;
 using EShop.Api.Extensions;
 using EShop.Api.Seeders;
 using EShop.Data;
@@ -51,6 +41,19 @@ namespace EShop.Api
             services.AddIdentityOptions();
             services.AddSwaggerConfiguration();
 
+            services.AddAuthorizationPolicyEvaluator();
+            services.AddAuthorization(options =>
+            {
+                AppPermissions.All().ForEach(claim =>
+                {
+                    options.AddPolicy(claim, policy =>
+                    {
+                        policy.RequireClaim(AppConstants.Permission, claim);
+                        policy.AuthenticationSchemes = new List<string>() {"Bearer"};
+                    });
+                });
+            });
+
             services.AddAutoMapper(typeof(EShopDbContext));
 
             services.AddControllers();
@@ -60,7 +63,7 @@ namespace EShop.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DatabaseSeeder seeder)
         {
             seeder.EnsureDatabaseExists(app);
-            seeder.Seed();
+            seeder.Seed().Wait();
 
             if (env.IsDevelopment())
             {
@@ -72,6 +75,8 @@ namespace EShop.Api
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

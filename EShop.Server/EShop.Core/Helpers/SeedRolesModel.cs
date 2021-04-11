@@ -8,6 +8,8 @@ namespace EShop.Core.Helpers
 {
     public class SeedRolesModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
+        public List<int> Permissions { get; set; }
     }
 }

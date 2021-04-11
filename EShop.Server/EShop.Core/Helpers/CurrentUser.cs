@@ -10,13 +10,17 @@ namespace EShop.Core.Helpers
 {
     public class CurrentUserService : ICurrentUser
     {
+        public CurrentUserService()
+        {
+            Claims = new List<Claim>();
+        }
         private List<Claim> _claims;
-        public Guid UserId
+        public int UserId
         {
             get
             {
-                var userId = GetClaim(ClaimTypes.NameIdentifier);
-                return Guid.Parse(userId);
+                var userId = Convert.ToInt32(GetClaim(ClaimTypes.NameIdentifier));
+                return userId;
             }
         }
 
@@ -28,6 +32,8 @@ namespace EShop.Core.Helpers
                 return role.ToLower();
             }
         }
+
+        public List<Claim> Claims { get; set; }
 
         public void SetClaims(IEnumerable<Claim> claims)
         {

@@ -68,13 +68,13 @@ namespace EShop.Api.Extensions
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder
+                options.AddDefaultPolicy(builder => builder
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .SetIsOriginAllowed(origin => true)
                         .AllowCredentials());
             });
+
             return services;
         }
 

@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EShop.Core.Entities.Identity
+namespace EShop.Core.Dto.RequestModels
 {
-    public class Permission : BaseEntity<int>
+    public class PermissionRequestModel
     {
+        public int Id { get; set; }
+        [Required]
         public string PermissionName { get; set; }
         public string Description { get; set; }
-        public ICollection<RolePermission> RolePermissions { get; set; }
     }
 }

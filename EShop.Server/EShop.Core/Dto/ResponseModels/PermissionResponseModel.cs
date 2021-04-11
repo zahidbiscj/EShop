@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EShop.Core.Entities.Identity
+namespace EShop.Core.Dto.ResponseModels
 {
-    public class Permission : BaseEntity<int>
+    public class PermissionResponseModel
     {
+        public int Id { get; set; }
         public string PermissionName { get; set; }
         public string Description { get; set; }
-        public ICollection<RolePermission> RolePermissions { get; set; }
     }
 }
