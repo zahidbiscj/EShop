@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using EShop.Api.Configurations;
@@ -11,15 +8,11 @@ using EShop.Core.Constants;
 using EShop.Core.Entities.Identity;
 using EShop.Core.Helpers;
 using EShop.Core.Interfaces.IRepositories;
-using EShop.Core.Interfaces.Others;
 using EShop.Data;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 
 namespace EShop.Api.Seeders
 {
@@ -59,27 +52,12 @@ namespace EShop.Api.Seeders
         {
             var seedPermissions = ReadJsonData<Permission>(_fileConfig.PermissionsFilename);
             var existingPermissions = await _permissionRepository.GetAllList();
-
             var newIds = seedPermissions.Select(x => x.Id).Except(existingPermissions.Select(x => x.Id)).ToList();
 
             await _permissionRepository.InsertRange(seedPermissions.Where(x => newIds.Contains(x.Id)));
-
-            DescriptionUpdateOfExistingPermission(seedPermissions, existingPermissions);
+            _seedIdentityHelper.DescriptionUpdateOfExistingPermission(seedPermissions, existingPermissions);
 
             await WriteToDb(TableNames.Permissions);
-        }
-
-        private void DescriptionUpdateOfExistingPermission(List<Permission> seedPermissions, IReadOnlyList<Permission> existingPermissions)
-        {
-            seedPermissions.ForEach(seedPermission =>
-            {
-                var permission = existingPermissions.FirstOrDefault(x => x.Id == seedPermission.Id);
-                if (permission != null)
-                {
-                    permission.Description = seedPermission.Description;
-                    _permissionRepository.Update(permission);
-                }
-            });
         }
 
         private async Task SeedUsersWithRoles()

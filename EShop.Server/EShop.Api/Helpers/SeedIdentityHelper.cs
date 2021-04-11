@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EShop.Api.Seeders;
 using EShop.Core.Entities.Identity;
 using EShop.Core.Helpers;
+using EShop.Core.Interfaces.IRepositories;
 using Microsoft.AspNetCore.Identity;
 
 namespace EShop.Api.Helpers
@@ -13,10 +14,13 @@ namespace EShop.Api.Helpers
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
-        public SeedIdentityHelper(UserManager<User> userManager, RoleManager<Role> roleManager)
+        private readonly IPermissionRepository _permissionRepository;
+
+        public SeedIdentityHelper(UserManager<User> userManager, RoleManager<Role> roleManager, IPermissionRepository permissionRepository)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _permissionRepository = permissionRepository;
         }
         public async Task InsertRoleWithPermissions(SeedRolesModel seedRole, DatabaseSeeder databaseSeeder)
         {
@@ -51,6 +55,19 @@ namespace EShop.Api.Helpers
                 }));
 
             await _roleManager.UpdateAsync(existingRole);
+        }
+
+        public void DescriptionUpdateOfExistingPermission(List<Permission> seedPermissions, IReadOnlyList<Permission> existingPermissions)
+        {
+            seedPermissions.ForEach(seedPermission =>
+            {
+                var permission = existingPermissions.FirstOrDefault(x => x.Id == seedPermission.Id);
+                if (permission != null)
+                {
+                    permission.Description = seedPermission.Description;
+                    _permissionRepository.Update(permission);
+                }
+            });
         }
     }
 }
