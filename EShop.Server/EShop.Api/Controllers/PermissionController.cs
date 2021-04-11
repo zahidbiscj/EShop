@@ -20,7 +20,7 @@ namespace EShop.Api.Controllers
         }
 
         [Authorize(Policy = AppPermissions.ViewPermissions)]
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             var result = await _permissionService.GetAllPermissions();

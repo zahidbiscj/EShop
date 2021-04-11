@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EShop.Core.Constants;
 using EShop.Core.Entities.Identity;
 using EShop.Core.Helpers;
 using EShop.Core.Interfaces.IRepositories;
+using EShop.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Api.Helpers
 {
@@ -13,12 +16,14 @@ namespace EShop.Api.Helpers
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly IPermissionRepository _permissionRepository;
+        private readonly EShopDbContext _context;
 
-        public SeedIdentityHelper(UserManager<User> userManager, RoleManager<Role> roleManager, IPermissionRepository permissionRepository)
+        public SeedIdentityHelper(UserManager<User> userManager, RoleManager<Role> roleManager, IPermissionRepository permissionRepository, EShopDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _permissionRepository = permissionRepository;
+            _context = context;
         }
         public async Task InsertRoleWithPermissions(SeedRolesModel seedRole)
         {
@@ -32,9 +37,9 @@ namespace EShop.Api.Helpers
                 });
             });
 
-            await _roleManager.CreateAsync(new Role()
+            var result = await _roleManager.CreateAsync(new Role()
             {
-                Id = seedRole.Id,
+                //Id = seedRole.Id,
                 Name = seedRole.Name,
                 RolePermissions = rolePermissions
             });
