@@ -10,6 +10,7 @@ namespace EShop.Core.Constants
     {
         public const string ViewWeatherForcast = "ViewWeatherForcast";
         public const string ViewPermissions = "ViewPermissions";
+        public const string AddRoles = "AddRoles";
 
         public static List<string> All()
         {
