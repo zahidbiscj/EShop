@@ -10,7 +10,7 @@ namespace EShop.Core.Dto.RequestModels
     public class PermissionRequestModel
     {
         public int Id { get; set; }
-        [Required]
+      //  [Required]
         public string PermissionName { get; set; }
         public string Description { get; set; }
     }

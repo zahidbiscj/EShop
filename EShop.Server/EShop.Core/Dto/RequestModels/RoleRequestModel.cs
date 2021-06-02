@@ -10,8 +10,9 @@ namespace EShop.Core.Dto.RequestModels
     public class RoleRequestModel
     {
         public int? Id { get; set; }
-        [Required]
+    ///    [Required]
         public string RoleName { get; set; }
+        public string[] PermissionList { get; set; }
         public List<PermissionRequestModel> Permissions { get; set; }
     }
 }
