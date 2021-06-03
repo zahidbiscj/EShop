@@ -13,5 +13,10 @@
     "id": "3",
     "permissionName": "AddRoles",
     "description": "Create a new Role"
+  },
+  {
+    "id": "4",
+    "permissionName": "ViewRoles",
+    "description": "View Roles" 
   }
 ]

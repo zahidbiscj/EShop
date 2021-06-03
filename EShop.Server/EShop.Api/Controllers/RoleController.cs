@@ -29,6 +29,7 @@ namespace EShop.Api.Controllers
             return Ok();
         }
 
+        [Authorize(Policy = AppPermissions.ViewRoles)]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll([FromQuery] PaginationQueryModel model)
         {
