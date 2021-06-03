@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 namespace EShop.Api.Extensions
 {
@@ -131,6 +133,17 @@ namespace EShop.Api.Extensions
                 });
             });
             return services;
+        }
+
+        public static void SerilogConfigurationSetup(this IServiceCollection services, IConfiguration Configuration)
+        {
+            var config = new ConfigurationBuilder()
+                .AddJsonFile(Path.Combine(Utils.RootPath, Configuration.GetSection(ConfigurationConstants.SerilogConfigFileName).Value))
+                .Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(config)
+                .CreateLogger();
         }
     }
 }

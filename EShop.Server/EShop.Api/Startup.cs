@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
-using EShop.Api.Configurations;
 using EShop.Api.DependenciesRegister;
 using EShop.Core.Constants;
 using EShop.Core.Helpers;
