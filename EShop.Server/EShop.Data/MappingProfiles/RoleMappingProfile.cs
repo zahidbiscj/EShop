@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using EShop.Core.Dto;
 using EShop.Core.Dto.RequestModels;
 using EShop.Core.Entities.Identity;
 
@@ -21,6 +22,8 @@ namespace EShop.Data.MappingProfiles
                         PermissionId = p.Id,
                         RoleId = role.Id ?? 0
                     }))).ReverseMap();
+
+            CreateMap<RoleModel, Role>().ReverseMap();
         }
     }
 }
