@@ -44,7 +44,9 @@ namespace EShop.Api
 
             var result = JsonConvert.SerializeObject(new
             {
-                message = code != HttpStatusCode.InternalServerError ? ex.Message : string.Empty,
+                message = ex.Message ?? string.Empty,
+                source = ex.Source,
+                innerException = ex.InnerException?.Message ?? string.Empty,
                 statusCode = (int)code
             });
             context.Response.ContentType = "application/json";
