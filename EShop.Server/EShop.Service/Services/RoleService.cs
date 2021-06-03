@@ -4,11 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using EShop.Core.Dto;
 using EShop.Core.Dto.RequestModels;
 using EShop.Core.Entities.Identity;
 using EShop.Core.Exceptions;
+using EShop.Core.Interfaces.IRepositories;
 using EShop.Core.Interfaces.IServices;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Service.Services
 {
@@ -31,6 +35,13 @@ namespace EShop.Service.Services
             
             if(!result.Succeeded)
                 throw new DomainException(result.Errors.First().Description);
+        }
+
+        public async Task<PagedResponse<RoleModel>> GetRoles(PaginationQueryModel model)
+        {
+            var query = _roleManager.Roles.AsQueryable();
+            var data = query.ProjectTo<RoleModel>(_mapper.ConfigurationProvider).AsNoTracking();
+            return await PagedResponse<RoleModel>.ApplyPagination(data, model.PageNo,model.PageSize);
         }
     }
 }
