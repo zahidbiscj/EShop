@@ -2,7 +2,7 @@
   {
     "id": 1,
     "name": "Admin",
-    "permissions": [1,2,3,4] 
+    "permissions": [1,2,3,4,5,6] 
   },
   {
     "id": 2,

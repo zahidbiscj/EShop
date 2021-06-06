@@ -12,6 +12,8 @@ namespace EShop.Core.Constants
         public const string ViewPermissions = "ViewPermissions";
         public const string AddRoles = "AddRoles";
         public const string ViewRoles = "ViewRoles";
+        public const string AddCategories = "AddCategories";
+        public const string ViewCategories = "ViewCategories";
 
         public static List<string> All()
         {

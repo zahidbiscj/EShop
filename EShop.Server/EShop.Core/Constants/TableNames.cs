@@ -17,5 +17,6 @@ namespace EShop.Core.Constants
         public const string RoleClaims = "Role_Claims";
         public const string UserClaims = "User_Claims";
         public const string UserTokens = "User_Tokens";
+        public const string Categories = "Categories";
     }
 }
