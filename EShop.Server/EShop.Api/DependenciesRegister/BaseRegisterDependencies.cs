@@ -8,7 +8,9 @@ using EShop.Api.Helpers;
 using EShop.Api.Seeders;
 using EShop.Core.Constants;
 using EShop.Core.Helpers;
+using EShop.Core.Interfaces.IRepositories;
 using EShop.Core.Interfaces.Others;
+using EShop.Data.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +25,7 @@ namespace EShop.Api.DependenciesRegister
             services.AddServicesDependency();
             services.AddRepositoriesDependency();
 
+            services.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>));
             services.AddScoped<IAuthorizationHandler, CustomAuthorizationExtension>();
             services.AddSingleton<ICurrentUser, CurrentUserService>();
             services.AddScoped<DatabaseSeeder>();

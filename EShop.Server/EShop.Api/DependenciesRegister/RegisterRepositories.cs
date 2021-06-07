@@ -13,7 +13,6 @@ namespace EShop.Api.DependenciesRegister
         public static IServiceCollection AddRepositoriesDependency(this IServiceCollection services)
         {
             services.AddScoped<IPermissionRepository, PermissionRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
             return services;
         }
     }
