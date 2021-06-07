@@ -36,11 +36,13 @@ namespace EShop.Api
 
         private static Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
-            var code = HttpStatusCode.InternalServerError;
-            if (ex is DomainException domEx)
+            var code = ex switch
             {
-                code = (HttpStatusCode)domEx.ToHttpStatusCode();
-            }
+                DomainException domEx => (HttpStatusCode) domEx.ToHttpStatusCode(),
+                UnAuthorizedException unAuthEx => (HttpStatusCode) unAuthEx.ToHttpStatusCode(),
+                ConflictException conflictEx => (HttpStatusCode)conflictEx.ToHttpStatusCode(),
+                _ => HttpStatusCode.InternalServerError
+            };
 
             var result = JsonConvert.SerializeObject(new
             {

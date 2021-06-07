@@ -13,5 +13,6 @@ namespace EShop.Core.Constants
         public static int UnAuthorized = 401;
         public static int Forbidden = 403;
         public static int NotFound = 404;
+        public static int Conflict = 409;
     }
 }
