@@ -16,6 +16,7 @@ namespace EShop.Api.DependenciesRegister
             services.AddScoped<IPermissionService,PermissionService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             return services;
         }

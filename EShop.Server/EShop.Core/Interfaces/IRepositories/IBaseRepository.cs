@@ -21,7 +21,10 @@ namespace EShop.Core.Interfaces.IRepositories
         Task InsertRange(IEnumerable<TModel> entity);
         void Update(TModel entity);
         void UpdateRange(IEnumerable<TModel> entity);
-        void Delete(TModel entity);
-        void DeleteRange(IEnumerable<TModel> entities);
+        void Remove(TModel entity);
+        Task RemoveAsync(int id);
+        void RemoveRange(List<TModel> entities);
+        void Save();
+        Task SaveAsync();
     }
 }

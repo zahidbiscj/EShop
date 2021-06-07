@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using EShop.Core.Entities;
+using EShop.Core.Entities.Core;
 using EShop.Core.Entities.Identity;
 using EShop.Core.Interfaces.Others;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +24,7 @@ namespace EShop.Data
 
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
