@@ -65,32 +65,45 @@ namespace EShop.Data.Repositories
         public async Task InsertRange(IEnumerable<TModel> entity)
         {
             await _dbSet.AddRangeAsync(entity);
-            //await _context.SaveChangesAsync();
         }
 
         public void Update(TModel entity)
         {
             _dbSet.Update(entity);
         }
+
         public void UpdateRange(IEnumerable<TModel> entity)
         {
             _dbSet.UpdateRange(entity);
         }
 
-        public async Task Delete(int id)
+        public async Task RemoveAsync(int id)
         {
             var entity = await GetById(id);
-            Delete(entity);
+            Remove(entity);
         }
 
-        public void Delete(TModel entity)
+        public void Remove(TModel entity)
         {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
             _dbSet.Remove(entity);
         }
 
-        public void DeleteRange(IEnumerable<TModel> entities)
+        public void RemoveRange(List<TModel> entities)
         {
             _dbSet.RemoveRange(entities);
+        }
+
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -17,6 +17,16 @@
   {
     "id": "4",
     "permissionName": "ViewRoles",
-    "description": "View Roles" 
+    "description": "View Roles"
+  },
+  {
+    "id": "5",
+    "permissionName": "AddCategories",
+    "description": "Create a new Category"
+  },
+  {
+    "id": "6",
+    "permissionName": "ViewCategories",
+    "description": "View Categories"
   }
 ]
