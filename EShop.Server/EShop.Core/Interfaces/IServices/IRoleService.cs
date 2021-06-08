@@ -12,5 +12,8 @@ namespace EShop.Core.Interfaces.IServices
     {
         Task CreateRole(RoleRequestModel model); 
         Task<PagedResponse<RoleModel>> GetRoles(PaginationQueryModel model);
+        Task<RoleModel> GetRoleById(int id);
+        Task Update(RoleRequestModel model);
+        Task Delete(int id);
     }
 }
