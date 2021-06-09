@@ -38,8 +38,8 @@ namespace EShop.Api.Controllers
         }
 
         [Authorize(Policy = AppPermissions.ViewRoles)]
-        [HttpGet("GetById/{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetById([FromQuery] int id)
         {
             RoleModel data = await _roleService.GetRoleById(id);
             return Ok(data);
@@ -55,7 +55,7 @@ namespace EShop.Api.Controllers
 
         [Authorize(Policy = AppPermissions.ViewRoles)]
         [HttpGet("Delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete([FromQuery] int id)
         {
             await _roleService.Delete(id);
             return Ok();

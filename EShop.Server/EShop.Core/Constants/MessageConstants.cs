@@ -12,5 +12,6 @@ namespace EShop.Core.Constants
         public const string UsernamePasswordDoNotMatch = "Username/Password do not match.";
         public const string UserNotFound = "No User Found.";
         public const string LoginSuccess = "Successfully logged in";
+        public const string RoleNotFound = "Role not found.";
     }
 }

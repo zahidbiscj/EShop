@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using EShop.Core.Constants;
 using EShop.Core.Dto;
 using EShop.Core.Dto.RequestModels;
 using EShop.Core.Entities;
@@ -53,6 +54,7 @@ namespace EShop.Service.Services
         public async Task<RoleModel> GetRoleById(int id)
         {
             return await _roleManager.Roles.Where(x => x.Id == id).AsQueryable()
+                                    .Include(x => x.RolePermissions)
                                     .ProjectTo<RoleModel>(_mapper.ConfigurationProvider).AsNoTracking()
                                     .FirstOrDefaultAsync();
         }
@@ -65,6 +67,9 @@ namespace EShop.Service.Services
         public async Task Delete(int id)
         {
             var existingRole = await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == id);
+            if(existingRole == null)
+                throw new NullReferenceException(MessageConstants.RoleNotFound);
+
             await _roleManager.DeleteAsync(existingRole);
         }
     }
