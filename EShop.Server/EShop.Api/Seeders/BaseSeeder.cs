@@ -63,8 +63,8 @@ namespace EShop.Api.Seeders
             using var serviceScope = applicationBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var context = serviceScope.ServiceProvider.GetService<EShopDbContext>();
 
-            if (context.Database.CanConnect())
-                context.Database.Migrate();
+            //if (context.Database.CanConnect())
+            //    context.Database.Migrate();
         }
     }
 }

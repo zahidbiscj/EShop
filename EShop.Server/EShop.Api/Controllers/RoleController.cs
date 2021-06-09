@@ -54,7 +54,7 @@ namespace EShop.Api.Controllers
         }
 
         [Authorize(Policy = AppPermissions.ViewRoles)]
-        [HttpGet("Delete")]
+        [HttpDelete("Delete")]
         public async Task<IActionResult> Delete([FromQuery] int id)
         {
             await _roleService.Delete(id);

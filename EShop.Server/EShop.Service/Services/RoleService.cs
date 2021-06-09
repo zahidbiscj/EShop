@@ -36,9 +36,12 @@ namespace EShop.Service.Services
             var existingPermissionOfRole = await _roleManager.Roles.Where(x => x.Name == role.Name)
                                                             .Include(x => x.RolePermissions).FirstOrDefaultAsync();
 
-            existingPermissionOfRole.Name = role.Name;
-            existingPermissionOfRole.RolePermissions.Clear();
-            role.RolePermissions.ToList().ForEach(rp => existingPermissionOfRole.RolePermissions.Add(rp));
+            if (existingPermissionOfRole != null)
+            {
+                existingPermissionOfRole.Name = role.Name;
+                existingPermissionOfRole.RolePermissions.Clear();
+                role.RolePermissions.ToList().ForEach(rp => existingPermissionOfRole.RolePermissions.Add(rp));
+            }
 
             var result = await _roleManager.RoleExistsAsync(role.Name) ?
                                                 await _roleManager.UpdateAsync(existingPermissionOfRole) :
