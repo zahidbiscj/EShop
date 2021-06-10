@@ -63,7 +63,21 @@ namespace EShop.Service.Services
             _categoryRepository.Update(updatedCategory);
             await _categoryRepository.SaveAsync();
         }
-        
+
+        public async Task<PagedResponse<CategoryModel>> GetAllRootCategories(PaginationQueryModel model)
+        {
+            var query = _categoryRepository.GetAllWithSpecAsync(new BaseSpecification<Category>(c=>c.ParentCategoryId==null));
+            var data = query.ProjectTo<CategoryModel>(_mapper.ConfigurationProvider).AsNoTracking();
+            return await PagedResponse<CategoryModel>.ApplyPagination(data, model.PageNo, model.PageSize);
+        }
+
+        public async Task<List<CategoryModel>> GetSubCategories(int id)
+        {
+            var query = _categoryRepository.GetAllWithSpecAsync(new BaseSpecification<Category>(c => c.ParentCategoryId == id));
+            var data = query.ProjectTo<CategoryModel>(_mapper.ConfigurationProvider).AsNoTracking();
+            return await data.ToListAsync();
+        }
+
 
         #region Supporting Method
 
@@ -71,6 +85,7 @@ namespace EShop.Service.Services
         {
             category.Name = model.Name;
             category.Description = model.Description;
+            category.ParentCategoryId = model.ParentCategoryId;
             return category;
         }
 
