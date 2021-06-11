@@ -17,6 +17,7 @@ namespace EShop.Core.Interfaces.IRepositories
         Task<IReadOnlyList<TModel>> ListWithSpec(ISpecification<TModel> spec);
         Task<int> CountWithSpec(ISpecification<TModel> spec);
         IQueryable<TModel> GetAll();
+        IQueryable<TModel> GetAllWithSpecAsync(ISpecification<TModel> spec);
         Task Insert(TModel entity);
         Task InsertRange(IEnumerable<TModel> entity);
         void Update(TModel entity);

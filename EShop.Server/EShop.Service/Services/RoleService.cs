@@ -41,7 +41,7 @@ namespace EShop.Service.Services
         {
             var query = _roleManager.Roles.AsQueryable();
             var data = query.ProjectTo<RoleModel>(_mapper.ConfigurationProvider).AsNoTracking();
-            return await PagedResponse<RoleModel>.ApplyPagination(data, model.PageNo,model.PageSize);
+            return await PagedResponse<RoleModel>.ApplyPaginationAsync(data, model.PageNo,model.PageSize);
         }
     }
 }

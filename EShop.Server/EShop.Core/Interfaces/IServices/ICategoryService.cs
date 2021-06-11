@@ -15,5 +15,7 @@ namespace EShop.Core.Interfaces.IServices
         Task<CategoryModel> GetCategory(int id);
         Task UpdateCategory(int id, CategoryRequestModel model);
         Task DeleteCategory(int id);
+        Task<PagedResponse<CategoryModel>> GetAllRootCategories(PaginationQueryModel model);
+        Task<List<CategoryModel>> GetSubCategories(int id);
     }
 }

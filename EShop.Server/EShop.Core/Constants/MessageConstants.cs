@@ -11,6 +11,7 @@ namespace EShop.Core.Constants
     {
         public const string UsernamePasswordDoNotMatch = "Username/Password do not match.";
         public const string UserNotFound = "No User Found.";
+        public const string CategoryAlreadyExist = "Category name already exist.";
         public const string LoginSuccess = "Successfully logged in";
     }
 }

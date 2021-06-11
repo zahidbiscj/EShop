@@ -36,10 +36,25 @@ namespace EShop.Api.Controllers
             return Ok(data);
         }
 
+        [Authorize(Policy = AppPermissions.ViewCategories)]
+        [HttpGet("GetAllRoot")]
+        public async Task<IActionResult> GetAllRoot([FromQuery] PaginationQueryModel model)
+        {
+            var data = await _categoryService.GetAllRootCategories(model);
+            return Ok(data);
+        }
+
         [HttpGet("Get/{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var data = await _categoryService.GetCategory(id);
+            return Ok(data);
+        }
+
+        [HttpGet("GetSubCategories/{id}")]
+        public async Task<IActionResult> GetSubCategories(int id)
+        {
+            var data = await _categoryService.GetSubCategories(id);
             return Ok(data);
         }
 
