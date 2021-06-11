@@ -64,7 +64,7 @@ namespace EShop.Api.Seeders
             var context = serviceScope.ServiceProvider.GetService<EShopDbContext>();
 
             //Todo: remove this line 
-            context.Database.EnsureDeleted();
+            //context.Database.EnsureDeleted();
             context.Database.Migrate();
         }
     }

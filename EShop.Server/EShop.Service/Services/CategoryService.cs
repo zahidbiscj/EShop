@@ -43,9 +43,17 @@ namespace EShop.Service.Services
 
         public async Task<PagedResponse<CategoryModel>> GetCategories(PaginationQueryModel model)
         {
-            var query = _categoryRepository.GetAll();
-            var data = query.ProjectTo<CategoryModel>(_mapper.ConfigurationProvider).AsNoTracking();
-            return await PagedResponse<CategoryModel>.ApplyPagination(data, model.PageNo, model.PageSize);
+            var categories = _categoryRepository.GetAll();
+            var allCategories = _mapper.Map<List<CategoryModel>>(categories);
+            var query = allCategories.Where(x => x.ParentCategoryId == 0).Select(x => new CategoryModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                SubCategories = GetSubCategoriesByParentId(allCategories, x.Id)
+            }).AsQueryable();
+
+            return await PagedResponse<CategoryModel>.ApplyPagination(query, model.PageNo, model.PageSize);
         }
 
         public async Task<CategoryModel> GetCategory(int id)
@@ -68,7 +76,7 @@ namespace EShop.Service.Services
         {
             var query = _categoryRepository.GetAllWithSpecAsync(new BaseSpecification<Category>(c=>c.ParentCategoryId==null));
             var data = query.ProjectTo<CategoryModel>(_mapper.ConfigurationProvider).AsNoTracking();
-            return await PagedResponse<CategoryModel>.ApplyPagination(data, model.PageNo, model.PageSize);
+            return await PagedResponse<CategoryModel>.ApplyPaginationAsync(data, model.PageNo, model.PageSize);
         }
 
         public async Task<List<CategoryModel>> GetSubCategories(int id)
@@ -80,6 +88,20 @@ namespace EShop.Service.Services
 
 
         #region Supporting Method
+
+        private static List<CategoryModel> GetSubCategoriesByParentId(List<CategoryModel> allCategories, int parentId)
+        {
+            var subCategories = allCategories.Where(x => x.ParentCategoryId == parentId)
+                .Select(x => new CategoryModel()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    SubCategories = GetSubCategoriesByParentId(allCategories, x.Id)
+                });
+
+            return subCategories.ToList();
+        } 
 
         private static Category UpdateCategoryFromModel(Category category, CategoryRequestModel model)
         {
