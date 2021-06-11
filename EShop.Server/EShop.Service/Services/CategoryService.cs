@@ -50,6 +50,7 @@ namespace EShop.Service.Services
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
+                ParentCategoryId = x.ParentCategoryId,
                 SubCategories = GetSubCategoriesByParentId(allCategories, x.Id)
             }).AsQueryable();
 
@@ -97,6 +98,7 @@ namespace EShop.Service.Services
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
+                    ParentCategoryId = x.ParentCategoryId,
                     SubCategories = GetSubCategoriesByParentId(allCategories, x.Id)
                 });
 
