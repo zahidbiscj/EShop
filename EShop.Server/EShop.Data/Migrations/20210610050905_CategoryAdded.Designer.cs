@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EShop.Data.Migrations
 {
     [DbContext(typeof(EShopDbContext))]
-    [Migration("20210606110118_CategoryAdded")]
+    [Migration("20210610050905_CategoryAdded")]
     partial class CategoryAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,9 @@ namespace EShop.Data.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParentCategoryId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int");

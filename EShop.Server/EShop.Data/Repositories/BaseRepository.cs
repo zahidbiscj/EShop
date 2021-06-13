@@ -34,20 +34,20 @@ namespace EShop.Data.Repositories
 
         public async Task<TModel> GetEntityWithSpec(ISpecification<TModel> spec)
         {
-            return await ApplySpecification(spec).FirstOrDefaultAsync();
+            return await GetAllWithSpecAsync(spec).FirstOrDefaultAsync();
         }
 
         public async Task<IReadOnlyList<TModel>> ListWithSpec(ISpecification<TModel> spec)
         {
-            return await ApplySpecification(spec).ToListAsync();
+            return await GetAllWithSpecAsync(spec).ToListAsync();
         }
 
         public async Task<int> CountWithSpec(ISpecification<TModel> spec)
         {
-            return await ApplySpecification(spec).CountAsync();
+            return await GetAllWithSpecAsync(spec).CountAsync();
         }
 
-        private IQueryable<TModel> ApplySpecification(ISpecification<TModel> spec)
+        public IQueryable<TModel> GetAllWithSpecAsync(ISpecification<TModel> spec)
         {
             return SpecificationEvaluator<TModel, TId>.GetQuery(_dbSet.AsQueryable(), spec);
         }
