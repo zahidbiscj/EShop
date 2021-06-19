@@ -36,5 +36,29 @@ namespace EShop.Api.Controllers
             PagedResponse<RoleModel> data = await _roleService.GetRoles(model);
             return Ok(data);
         }
+
+        [Authorize(Policy = AppPermissions.ViewRoles)]
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetById([FromQuery] int id)
+        {
+            RoleModel data = await _roleService.GetRoleById(id);
+            return Ok(data);
+        }
+
+        [Authorize(Policy = AppPermissions.ViewRoles)]
+        [HttpGet("Update")]
+        public async Task<IActionResult> Update([FromQuery] RoleRequestModel model)
+        {
+            await _roleService.Update(model);
+            return Ok();
+        }
+
+        [Authorize(Policy = AppPermissions.ViewRoles)]
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> Delete([FromQuery] int id)
+        {
+            await _roleService.Delete(id);
+            return Ok();
+        }
     }
 }

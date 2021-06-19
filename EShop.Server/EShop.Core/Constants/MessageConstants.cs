@@ -13,5 +13,6 @@ namespace EShop.Core.Constants
         public const string UserNotFound = "No User Found.";
         public const string CategoryAlreadyExist = "Category name already exist.";
         public const string LoginSuccess = "Successfully logged in";
+        public const string RoleNotFound = "Role not found.";
     }
 }
