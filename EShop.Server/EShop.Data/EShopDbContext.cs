@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using EShop.Core.Entities;
 using EShop.Core.Entities.Core;
 using EShop.Core.Entities.Identity;
+using EShop.Core.Helpers;
 using EShop.Core.Interfaces.Others;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -43,11 +44,11 @@ namespace EShop.Data
                 {
                     case EntityState.Added:
                         item.Entity.CreatedAt = DateTime.Now;
-                        item.Entity.CreatedBy = 1;
+                        item.Entity.CreatedBy = Utils.UserId;
                         break;
                     case EntityState.Modified:
                         item.Entity.LastUpdated = DateTime.Now;
-                        item.Entity.UpdatedBy = 1;
+                        item.Entity.UpdatedBy = Utils.UserId;
                         break;
                     default:
                         break;
