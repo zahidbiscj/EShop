@@ -9,5 +9,6 @@ namespace EShop.Core.Helpers
     public static class Utils
     {
         public static string RootPath;
+        public static int UserId { get; set; }
     }
 }

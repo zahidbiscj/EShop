@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EShop.Core.Constants;
+using EShop.Core.Helpers;
 using EShop.Core.Interfaces.IServices;
 using EShop.Core.Interfaces.Others;
 using Microsoft.AspNetCore.Authorization;
@@ -30,6 +31,7 @@ namespace EShop.Api.Extensions
             }
 
             var claims = await _permissionService.GetPermissionsByUserId(_currentUser.UserId);
+            Utils.UserId = _currentUser.UserId;
             this._currentUser.SetClaims(claims.Select(claim => new System.Security.Claims.Claim(AppConstants.Permission, claim)));
 
             foreach (var item in requirement.AllowedValues)

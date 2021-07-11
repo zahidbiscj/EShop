@@ -6,7 +6,12 @@
   },
   {
     "id": 2,
+    "name": "Manager",
+    "permissions": [ 1,3,4 ]
+  },
+  {
+    "id": 3,
     "name": "Customer",
-    "permissions": [1]
+    "permissions": [ 1 ]
   }
 ]
