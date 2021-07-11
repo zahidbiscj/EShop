@@ -66,10 +66,12 @@ namespace EShop.Api.Seeders
             var users = _mapper.Map<List<User>>(seedUsers);
             foreach (var user in users)
             {
+                var seedUser = seedUsers.FirstOrDefault(su => su.Id == user.Id);
+                user.Id = 0;
                 var result = await _userManager.CreateAsync(user, AppConstants.DefaultPassword);
                 if (result.Succeeded)
                 {
-                    var role = await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == user.Id);
+                    var role = await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == seedUser.RoleId);
                     _userManager.AddToRoleAsync(user, role?.Name).Wait();
                 }
             }
