@@ -2,17 +2,25 @@
   {
     "id": 1,
     "fullName": "Rakib Hasan",
-    "email": "rakib@gmail.com",
+    "email": "admin@system.com",
     "phoneNumber": "01913246739",
-    "userName": "rakib@gmail.com",
+    "userName": "admin@system.com",
     "roleId": 1
   },
   {
     "id": 2,
-    "fullName": "Shahed",
-    "email": "shahed@gmail.com",
+    "fullName": "Emam Uddin Shahed",
+    "email": "customer@system.com",
     "phoneNumber": "01956746787",
-    "userName": "shahed@gmail.com",
+    "userName": "customer@system.com",
+    "roleId": 3
+  },
+  {
+    "id": 3,
+    "fullName": "Arman Abdullah",
+    "email": "manager@system.com",
+    "phoneNumber": "01956746787",
+    "userName": "manager@system.com",
     "roleId": 2
   }
 ]

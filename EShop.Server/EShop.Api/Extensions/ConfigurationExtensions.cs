@@ -91,7 +91,7 @@ namespace EShop.Api.Extensions
             services.Configure<IdentityOptions>(option =>
             {
                 option.Password.RequireDigit = false;
-                option.Password.RequiredLength = 4;
+                option.Password.RequiredLength = 3;
                 option.Password.RequireLowercase = false;
                 option.Password.RequireNonAlphanumeric = false;
                 option.Password.RequireUppercase = false;
