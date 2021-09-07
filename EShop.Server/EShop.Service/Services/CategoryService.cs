@@ -29,15 +29,21 @@ namespace EShop.Service.Services
         }
         public async Task CreateCategory(CategoryRequestModel model)
         {
-            await CheckDuplicateName(model.Name);
+            
             var category = _mapper.Map<Category>(model);
-            await _categoryRepository.Insert(category);
+
+            if (model.Id == 0) await _categoryRepository.Insert(category);
+            else _categoryRepository.Update(category);
+
             await _categoryRepository.SaveAsync();
+
         }
 
         public async Task DeleteCategory(int id)
         {
-            await _categoryRepository.RemoveAsync(id);
+            var categories =_categoryRepository.GetAll().Where(x => x.ParentCategoryId == id || x.Id==id).ToList();
+            
+            _categoryRepository.RemoveRange(categories);
             await _categoryRepository.SaveAsync();
         }
 
@@ -45,7 +51,7 @@ namespace EShop.Service.Services
         {
             var categories = _categoryRepository.GetAll();
             var allCategories = _mapper.Map<List<CategoryModel>>(categories);
-            var query = allCategories.Where(x => x.ParentCategoryId == 0).Select(x => new CategoryModel()
+            var query = allCategories.Where(x => x.ParentCategoryId == 1).Select(x => new CategoryModel()
             {
                 Id = x.Id,
                 Name = x.Name,
