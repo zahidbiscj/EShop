@@ -21,11 +21,12 @@ namespace EShop.Service.Services
     {
         private readonly IBaseRepository<Category,int> _categoryRepository;
         private readonly IMapper _mapper;
-
+        private List<Category> _categoryList;
         public CategoryService(IBaseRepository<Category, int> categoryRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
+            _categoryList = new List<Category>();
         }
         public async Task CreateCategory(CategoryRequestModel model)
         {
@@ -41,10 +42,24 @@ namespace EShop.Service.Services
 
         public async Task DeleteCategory(int id)
         {
-            var categories =_categoryRepository.GetAll().Where(x => x.ParentCategoryId == id || x.Id==id).ToList();
+            var category =_categoryRepository.GetAll().Where(x=>x.Id==id).FirstOrDefault();
+            GetCategoryDeletedList(id);
+            _categoryList.Add(category);
             
-            _categoryRepository.RemoveRange(categories);
+            _categoryRepository.RemoveRange(_categoryList);
             await _categoryRepository.SaveAsync();
+        }
+
+        public void GetCategoryDeletedList(int id)
+        {
+            var categories = _categoryRepository.GetAll().Where(x => x.ParentCategoryId == id).ToList();
+            if (categories == null) return;
+            foreach(var category in categories)
+            {
+                _categoryList.Add(category);
+                GetCategoryDeletedList(category.Id);
+            }
+
         }
 
         public async Task<PagedResponse<CategoryModel>> GetCategories(PaginationQueryModel model)
