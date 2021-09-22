@@ -21,31 +21,52 @@ namespace EShop.Service.Services
     {
         private readonly IBaseRepository<Category,int> _categoryRepository;
         private readonly IMapper _mapper;
-
+        private List<Category> _categoryList;
         public CategoryService(IBaseRepository<Category, int> categoryRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
+            _categoryList = new List<Category>();
         }
         public async Task CreateCategory(CategoryRequestModel model)
         {
-            await CheckDuplicateName(model.Name);
+            
             var category = _mapper.Map<Category>(model);
-            await _categoryRepository.Insert(category);
+
+            if (model.Id == 0) await _categoryRepository.Insert(category);
+            else _categoryRepository.Update(category);
+
             await _categoryRepository.SaveAsync();
+
         }
 
         public async Task DeleteCategory(int id)
         {
-            await _categoryRepository.RemoveAsync(id);
+            var category =_categoryRepository.GetAll().Where(x=>x.Id==id).FirstOrDefault();
+            GetCategoryDeletedList(id);
+            _categoryList.Add(category);
+            
+            _categoryRepository.RemoveRange(_categoryList);
             await _categoryRepository.SaveAsync();
+        }
+
+        public void GetCategoryDeletedList(int id)
+        {
+            var categories = _categoryRepository.GetAll().Where(x => x.ParentCategoryId == id).ToList();
+            if (categories == null) return;
+            foreach(var category in categories)
+            {
+                _categoryList.Add(category);
+                GetCategoryDeletedList(category.Id);
+            }
+
         }
 
         public async Task<PagedResponse<CategoryModel>> GetCategories(PaginationQueryModel model)
         {
             var categories = _categoryRepository.GetAll();
             var allCategories = _mapper.Map<List<CategoryModel>>(categories);
-            var query = allCategories.Where(x => x.ParentCategoryId == 0).Select(x => new CategoryModel()
+            var query = allCategories.Where(x => x.ParentCategoryId == 1).Select(x => new CategoryModel()
             {
                 Id = x.Id,
                 Name = x.Name,

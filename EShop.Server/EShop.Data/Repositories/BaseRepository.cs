@@ -69,7 +69,7 @@ namespace EShop.Data.Repositories
 
         public void Update(TModel entity)
         {
-            _dbSet.Update(entity);
+             _dbSet.Update(entity);
         }
 
         public void UpdateRange(IEnumerable<TModel> entity)
